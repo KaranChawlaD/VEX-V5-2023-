@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <math.h>
+#include <math.h> q
 #include <string.h>
 
 #include "vex.h"
@@ -38,19 +38,22 @@ competition Competition;
 
 brain Brain;
 controller Controller1 = controller(primary);
-motor axelMotor = motor(PORT1, ratio36_1, false);
+motor axelMotor = motor(PORT4, ratio36_1, false);
 motor LeftDriveSmart = motor(PORT2, ratio6_1, false);
 motor RightDriveSmart = motor(PORT3, ratio6_1, true);
 drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.19, 317.5, 117.475, mm, 1);
-
+motor clawMotor = motor(PORT4, ratio36_1, false);
 
 
 // define variable for remote controller enable/disable
 bool RemoteControlCodeEnabled = true;
 #pragma endregion VEXcode Generated Robot Configuration
 
-void axelSpinForward() {axelMotor.setVelocity(50, percent);}
-void axelSpinStop() {axelMotor.setVelocity(0, percent);}
+void axelSpinForward() {axelMotor.spin(forward, 50, percent);}
+void axelSpinStop() {axelMotor.spin(forward, 0, percent);}
+
+//void clawOpen() {clawMotor.spinFor(forward, 45, degrees, 50, percent, true);}
+//void clawCLose() {clawMotor.spinFor(backward, 25, degrees, 50, percent, true);}
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
