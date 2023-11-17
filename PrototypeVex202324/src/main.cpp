@@ -42,7 +42,7 @@ motor axelMotor = motor(PORT4, ratio36_1, false);
 motor LeftDriveSmart = motor(PORT2, ratio6_1, false);
 motor RightDriveSmart = motor(PORT3, ratio6_1, true);
 drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.19, 317.5, 117.475, mm, 1);
-motor clawMotor = motor(PORT4, ratio36_1, false);
+motor clawMotor = motor(PORT5, ratio36_1, false);
 
 
 // define variable for remote controller enable/disable
@@ -117,6 +117,7 @@ void runOnDriverControl(void) {
     //axel spinning for throwing
     Controller1.ButtonR2.pressed(axelSpinForward);
     Controller1.ButtonR2.released(axelSpinStop);
+    axelMotor.spin(forward, 35, percent);
     
     //movemnet of robot
     if (Controller1.Axis3.position() > 0.0) {
