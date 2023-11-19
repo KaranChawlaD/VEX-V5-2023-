@@ -121,10 +121,16 @@ void runOnDriverControl(void) {
     axelMotor.spin(forward, 35, percent);
 
     //open and close claw
-    //open claw / rotate motor left
-    Controller1.ButtonR1.pressed(clawMotorOpen)
-    //close claw / rotate motor right
-    Controller1.ButtonL1.pressed(clawMotorClose)
+    //open claw
+    Controller1.ButtonR1.pressed({
+      if (!clawOpen) {
+        clawMotorOpen();
+      }});
+    //close claw
+    Controller1.ButtonL1.pressed({
+      if (clawOpen) {
+        clawMotorClose();
+      }});
     
     //driving of robot
     if (Controller1.Axis3.position() > 0.0 and Controller1.Axis1.position() > 0.0) { //turn right
