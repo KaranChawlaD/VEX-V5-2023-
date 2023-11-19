@@ -119,17 +119,24 @@ void runOnDriverControl(void) {
     Controller1.ButtonR2.released(axelSpinStop);
     axelMotor.spin(forward, 35, percent);
     
-    //movemnet of robot
-    if (Controller1.Axis3.position() > 0.0) {
-      LeftDriveSmart.setVelocity((Controller1.Axis3.position() + Controller1.Axis4.position())/1.5, percent);
-      RightDriveSmart.setVelocity((Controller1.Axis3.position() - Controller1.Axis4.position())/1.5, percent);
+    //driving of robot
+    if (Controller1.Axis3.position() > 0.0 and Controller1.Axis1.position() > 0.0) { //turn right
+      LeftDriveSmart.setVelocity((Controller1.Axis3.position() + Controller1.Axis1.position())/1.5, percent);
+      RightDriveSmart.setVelocity((Controller1.Axis3.position() - Controller1.Axis1.position())/1.5, percent);
+    }
+    else if (Controller1.Axis3.position() > 0.0 and Controller1.Axis1.position() < 0.0) { //turn left
+      LeftDriveSmart.setVelocity((Controller1.Axis3.position() - Controller1.Axis1.position())/1.5, percent);
+      RightDriveSmart.setVelocity((Controller1.Axis3.position() + Controller1.Axis1.position())/1.5, percent);
+    }
+    else if (Controller1.Axis3.position() < 0.0 and Controller1.Axis1.position() > 0.0) { // go right
+      LeftDriveSmart.setVelocity((Controller1.Axis3.position() - Controller1.Axis1.position())/1.5, percent);
+      RightDriveSmart.setVelocity((Controller1.Axis3.position() + Controller1.Axis1.position())/1.5, percent);
+    }
+    else { // go left
+      LeftDriveSmart.setVelocity((Controller1.Axis3.position() + Controller1.Axis1.position())/1.5, percent);
+      RightDriveSmart.setVelocity((Controller1.Axis3.position() - Controller1.Axis1.position())/1.5, percent);
     }
 
-    else {
-      RightDriveSmart.setVelocity((Controller1.Axis3.position() + Controller1.Axis4.position())/1.5, percent);
-      LeftDriveSmart.setVelocity((Controller1.Axis3.position() - Controller1.Axis4.position())/1.5, percent);
-    }
-    
     LeftDriveSmart.spin(forward);
     RightDriveSmart.spin(forward); 
     // ........................................................................
