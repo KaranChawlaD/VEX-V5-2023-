@@ -52,8 +52,9 @@ bool RemoteControlCodeEnabled = true;
 void axelSpinForward() {axelMotor.spin(forward, 50, percent);}
 void axelSpinStop() {axelMotor.spin(forward, 0, percent);}
 
-//void clawOpen() {clawMotor.spinFor(forward, 45, degrees, 50, percent, true);}
-//void clawCLose() {clawMotor.spinFor(backward, 25, degrees, 50, percent, true);}
+//claw motor defaults
+void clawMotorOpen() {clawMotor.spinFor(forward, 0.5, seconds, 50, percent);}
+void clawMotorClose() {clawMotor.spinFor(backward, 0.5, seconds, 50, percent);}
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -118,6 +119,12 @@ void runOnDriverControl(void) {
     Controller1.ButtonR2.pressed(axelSpinForward);
     Controller1.ButtonR2.released(axelSpinStop);
     axelMotor.spin(forward, 35, percent);
+
+    //open and close claw
+    //open claw / rotate motor left
+    Controller1.ButtonR1.pressed(clawMotorOpen)
+    //close claw / rotate motor right
+    Controller1.ButtonL1.pressed(clawMotorClose)
     
     //driving of robot
     if (Controller1.Axis3.position() > 0.0 and Controller1.Axis1.position() > 0.0) { //turn right
