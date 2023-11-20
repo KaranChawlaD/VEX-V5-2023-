@@ -44,7 +44,7 @@ motor RightDriveSmart = motor(PORT3, ratio6_1, true);
 drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.19, 317.5, 117.475, mm, 1);
 motor clawMotor = motor(PORT5, ratio36_1, false);
 //claw is initially closed
-bool clawOpen = false;
+// bool clawOpen = false;
 
 
 // define variable for remote controller enable/disable
@@ -52,9 +52,13 @@ bool RemoteControlCodeEnabled = true;
 #pragma endregion VEXcode Generated Robot Configuration
 
 void axelSpinForward() {axelMotor.spin(forward, 50, percent);}
+void axelSpinHold() {axelMotor.spin(forward, 5, percent);}
 void axelSpinStop() {axelMotor.spin(forward, 0, percent);}
 
 //claw motor defaults
+void clawMotorOpen() {clawMotor.spin(forward, 100, percent);}
+void clawMotorClose() {clawMotor.spin(forward, -100, percent);}
+void clawMotorStop() {clawMotor.spin(forward, 0, percent);}
 //void clawMotorOpen() {clawMotor.spinFor(forward, 0.5, seconds, 50.0, percent);}
 //void clawMotorClose() {clawMotor.spinFor(forward, -0.5, seconds, 50.0, percent);}
 
@@ -118,14 +122,20 @@ void runOnDriverControl(void) {
     // Insert user code here. This is where you use the joystick values to
     // update your motors, etc.
     //axel spinning for throwing
-    Controller1.ButtonR2.pressed(axelSpinForward);
-    Controller1.ButtonR2.released(axelSpinStop);
-    //axelMotor.spin(forward, 35, percent);
+    Controller1.ButtonR1.pressed(axelSpinForward);
+    Controller1.ButtonR1.released(axelSpinHold);
+    Controller1.ButtonR2.pressed(axelSpinStop);
+    Controller1.ButtonR2.released(axelSpinHold);
+    
+    
 
     //open and close claw
+    Controller1.ButtonL1.pressed(clawMotorClose);
+    Controller1.ButtonL2.pressed(clawMotorClose);
+    Controller1.ButtonL1.released(clawMotorStop);
+    Controller1.ButtonL2.released(clawMotorStop);
     //open claw
-    /***
-    Controller1.ButtonR1.pressed({
+    /***Controller1.ButtonR1.pressed({
       if (!clawOpen) {
         clawMotorOpen();
         clawOpen = true;
@@ -135,25 +145,27 @@ void runOnDriverControl(void) {
       if (clawOpen) {
         clawMotorClose();
         clawOpen = false;
-      }});
-    ***/
+      }}); ***/
     //driving of robot
-    if (Controller1.Axis3.position() > 0.0 and Controller1.Axis1.position() > 0.0) { //turn right
-      LeftDriveSmart.setVelocity((Controller1.Axis3.position() + Controller1.Axis1.position())/1.5, percent);
-      RightDriveSmart.setVelocity((Controller1.Axis3.position() - Controller1.Axis1.position())/1.5, percent);
-    }
-    else if (Controller1.Axis3.position() > 0.0 and Controller1.Axis1.position() < 0.0) { //turn left
-      LeftDriveSmart.setVelocity((Controller1.Axis3.position() - Controller1.Axis1.position())/1.5, percent);
-      RightDriveSmart.setVelocity((Controller1.Axis3.position() + Controller1.Axis1.position())/1.5, percent);
-    }
-    else if (Controller1.Axis3.position() < 0.0 and Controller1.Axis1.position() > 0.0) { // go right
-      LeftDriveSmart.setVelocity((Controller1.Axis3.position() - Controller1.Axis1.position())/1.5, percent);
-      RightDriveSmart.setVelocity((Controller1.Axis3.position() + Controller1.Axis1.position())/1.5, percent);
-    }
-    else { // go left
-      LeftDriveSmart.setVelocity((Controller1.Axis3.position() + Controller1.Axis1.position())/1.5, percent);
-      RightDriveSmart.setVelocity((Controller1.Axis3.position() - Controller1.Axis1.position())/1.5, percent);
-    }
+    //USE ARCADE DRIVE
+    // if (Controller1.Axis3.position() > 0.0 and Controller1.Axis1.position() > 0.0) { //turn right
+    //   LeftDriveSmart.setVelocity((Controller1.Axis3.position() + Controller1.Axis1.position())/1.5, percent);
+    //   RightDriveSmart.setVelocity((Controller1.Axis3.position() - Controller1.Axis1.position())/1.5, percent);
+    // }
+    // else if (Controller1.Axis3.position() > 0.0 and Controller1.Axis1.position() < 0.0) { //turn left
+    //   LeftDriveSmart.setVelocity((Controller1.Axis3.position() + Controller1.Axis1.position())/1.5, percent);
+    //   RightDriveSmart.setVelocity((Controller1.Axis3.position() - Controller1.Axis1.position())/1.5, percent);
+    // }
+    // else if (Controller1.Axis3.position() < 0.0 and Controller1.Axis1.position() > 0.0) { // go right
+    //   LeftDriveSmart.setVelocity((Controller1.Axis3.position() + Controller1.Axis1.position())/1.5, percent);
+    //   RightDriveSmart.setVelocity((Controller1.Axis3.position() - Controller1.Axis1.position())/1.5, percent);
+    // }
+    // else { // go left
+    //   LeftDriveSmart.setVelocity((Controller1.Axis3.position() + Controller1.Axis1.position())/1.5, percent);
+    //   RightDriveSmart.setVelocity((Controller1.Axis3.position() - Controller1.Axis1.position())/1.5, percent);
+    // }
+    LeftDriveSmart.setVelocity(Controller1.Axis3.position()+Controller1.Axis1.position(), percent);
+    RightDriveSmart.setVelocity(Controller1.Axis3.position()-Controller1.Axis1.position(), percent);
 
     LeftDriveSmart.spin(forward);
     RightDriveSmart.spin(forward); 
