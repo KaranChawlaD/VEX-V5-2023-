@@ -55,14 +55,8 @@ void axelSpinForward() {axelMotor.spin(forward, 50, percent);}
 void axelSpinStop() {axelMotor.spin(forward, 0, percent);}
 
 //claw motor defaults
-void clawMotorOpen() {
-  clawMotor.spinFor(forward, 0.5, seconds, 50, percent);
-  clawOpen = true;
-  }
-void clawMotorClose() {
-  clawMotor.spinFor(backward, 0.5, seconds, 50, percent);
-  clawOpen = false;
-  }
+void clawMotorOpen() {clawMotor.spinFor(forward, 0.5, seconds, 50, percent);}
+void clawMotorClose() {clawMotor.spinFor(backward, 0.5, seconds, 50, percent);}
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -133,11 +127,13 @@ void runOnDriverControl(void) {
     Controller1.ButtonR1.pressed({
       if (!clawOpen) {
         clawMotorOpen();
+        clawOpen = true;
       }});
     //close claw
     Controller1.ButtonL1.pressed({
       if (clawOpen) {
         clawMotorClose();
+        clawOpen = false;
       }});
     
     //driving of robot
