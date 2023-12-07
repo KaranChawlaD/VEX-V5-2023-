@@ -56,11 +56,16 @@ void axelSpinHold() {axelMotor.spin(forward, 5, percent);}
 void axelSpinStop() {axelMotor.spin(forward, 0, percent);}
 
 //claw motor defaults
-void clawMotorOpen() {clawMotor.spin(forward, 100, percent);}
-void clawMotorClose() {clawMotor.spin(forward, -100, percent);}
-void clawMotorStop() {clawMotor.spin(forward, 0, percent);}
+void clawMotorOpen() {clawMotor.spin(forward, -50, percent);}
+void clawMotorClose() {clawMotor.spin(forward, 50, percent);}
+void clawMotorStall() {clawMotor.spin(forward, 1, percent);}
 //void clawMotorOpen() {clawMotor.spinFor(forward, 0.5, seconds, 50.0, percent);}
 //void clawMotorClose() {clawMotor.spinFor(forward, -0.5, seconds, 50.0, percent);}
+
+void drive(int v) {
+  LeftDriveSmart.setVelocity(v, percent);
+  RightDriveSmart.setVelocity(v, percent);
+}
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -90,12 +95,23 @@ void pre_auton(void) {
 
 void runOnAutonomous(void) {
   Brain.Screen.print("Running auto");
-  
-  Drivetrain.driveFor(forward, 20, inches);
-  Drivetrain.turnFor(right, 180, degrees);
+  drive(60);
+  wait (4, seconds);
+  clawMotor.spin(forward, -50, percent);
+  wait (0.5, seconds);
+  drive(-10);
   wait (1, seconds);
-  Drivetrain.driveFor(forward, 20, inches);
+  Drivetrain.turnFor(right, 180, degrees); //******
+  drive(60);
+  wait (4, seconds);
+  clawMotor.spin(forward, 50, percent);
   Drivetrain.turnFor(right, 180, degrees);
+  drive(60);
+  wait (4, seconds);
+  clawMotor.spin(forward, -50, percent);
+  wait (0.5, seconds);
+  drive(60);
+  wait (4, seconds);
 }
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
@@ -131,9 +147,9 @@ void runOnDriverControl(void) {
 
     //open and close claw
     Controller1.ButtonL1.pressed(clawMotorClose);
-    Controller1.ButtonL2.pressed(clawMotorClose);
-    Controller1.ButtonL1.released(clawMotorStop);
-    Controller1.ButtonL2.released(clawMotorStop);
+    Controller1.ButtonL2.pressed(clawMotorOpen);
+    Controller1.ButtonL1.released(clawMotorStall);
+    Controller1.ButtonL2.released(clawMotorStall);
     //open claw
     /***Controller1.ButtonR1.pressed({
       if (!clawOpen) {
@@ -181,7 +197,7 @@ void runOnDriverControl(void) {
 //
 int main() {
   // Set up callbacks for autonomous and driver control periods.
-  //Competition.autonomous(autonomous);
+  Competition.autonomous(runOnAutonomous);
   Competition.drivercontrol(runOnDriverControl);
 
   // Run the pre-autonomous function.
