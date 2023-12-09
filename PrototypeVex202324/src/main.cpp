@@ -52,21 +52,30 @@ bool RemoteControlCodeEnabled = true;
 #pragma endregion VEXcode Generated Robot Configuration
 
 void axelSpinForward() {axelMotor.spin(forward, 50, percent);}
-void axelSpinHold() {axelMotor.spin(forward, 5, percent);}
+// void axelSpinHold() {axelMotor.spin(forward, 5, percent);}
 void axelSpinStop() {axelMotor.spin(forward, 0, percent);}
+void axelSpinBackward() {axelMotor.spin(forward, -50, percent);}
 
 //claw motor defaults
 void clawMotorOpen() {clawMotor.spin(forward, -50, percent);}
 void clawMotorClose() {clawMotor.spin(forward, 50, percent);}
-void clawMotorStall() {clawMotor.spin(forward, 1, percent);}
+void clawMotorStop() {clawMotor.spin(forward, 0, percent);}
+// void clawMotorStall() {clawMotor.spin(forward, 0.7, percent);}
 //void clawMotorOpen() {clawMotor.spinFor(forward, 0.5, seconds, 50.0, percent);}
 //void clawMotorClose() {clawMotor.spinFor(forward, -0.5, seconds, 50.0, percent);}
-
+void turnRobot() {
+  LeftDriveSmart.setVelocity(100, percent);
+  RightDriveSmart.setVelocity(-100, percent);
+  wait (0.5, seconds);
+  LeftDriveSmart.setVelocity(0, percent);
+  RightDriveSmart.setVelocity(0, percent);
+}
+/*
 void drive(int v) {
   LeftDriveSmart.setVelocity(v, percent);
   RightDriveSmart.setVelocity(v, percent);
 }
-
+*/
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
 /*                                                                           */
@@ -94,24 +103,15 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
 
 void runOnAutonomous(void) {
+  Drivetrain.setDriveVelocity(50, percent);
   Brain.Screen.print("Running auto");
-  drive(60);
-  wait (4, seconds);
+  Drivetrain.driveFor(forward, 110, inches);
   clawMotor.spin(forward, -50, percent);
-  wait (0.5, seconds);
-  drive(-10);
-  wait (1, seconds);
-  Drivetrain.turnFor(right, 180, degrees); //******
-  drive(60);
-  wait (4, seconds);
-  clawMotor.spin(forward, 50, percent);
-  Drivetrain.turnFor(right, 180, degrees);
-  drive(60);
-  wait (4, seconds);
-  clawMotor.spin(forward, -50, percent);
-  wait (0.5, seconds);
-  drive(60);
-  wait (4, seconds);
+  wait (0.75, seconds);
+  Drivetrain.driveFor(forward, -50, inches);
+  turnRobot();
+  Drivetrain.driveFor(forward, 20, inches);
+
 }
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
@@ -139,17 +139,22 @@ void runOnDriverControl(void) {
     // update your motors, etc.
     //axel spinning for throwing
     Controller1.ButtonR1.pressed(axelSpinForward);
-    Controller1.ButtonR1.released(axelSpinHold);
-    Controller1.ButtonR2.pressed(axelSpinStop);
-    Controller1.ButtonR2.released(axelSpinHold);
+    Controller1.ButtonR1.released(axelSpinStop);
+    // Controller1.ButtonR1.released(axelSpinHold);
+    Controller1.ButtonR2.pressed(axelSpinBackward);
+    Controller1.ButtonR2.released(axelSpinStop);
+    // Controller1.ButtonR2.released(axelSpinHold);
     
     
 
     //open and close claw
     Controller1.ButtonL1.pressed(clawMotorClose);
     Controller1.ButtonL2.pressed(clawMotorOpen);
-    Controller1.ButtonL1.released(clawMotorStall);
-    Controller1.ButtonL2.released(clawMotorStall);
+    //placeholder
+    Controller1.ButtonL1.released(clawMotorStop);
+    Controller1.ButtonL2.released(clawMotorStop);
+    // Controller1.ButtonL1.released(clawMotorStall);
+    // Controller1.ButtonL2.released(clawMotorStall);
     //open claw
     /***Controller1.ButtonR1.pressed({
       if (!clawOpen) {
