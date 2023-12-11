@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <math.h> q
+#include <math.h> 
 #include <string.h>
 
 #include "vex.h"
@@ -66,9 +66,22 @@ void clawMotorStop() {clawMotor.spin(forward, 0, percent);}
 void turnRobot() {
   LeftDriveSmart.setVelocity(100, percent);
   RightDriveSmart.setVelocity(-100, percent);
+  LeftDriveSmart.spin(forward);
+  RightDriveSmart.spin(forward);
   wait (0.5, seconds);
   LeftDriveSmart.setVelocity(0, percent);
   RightDriveSmart.setVelocity(0, percent);
+  LeftDriveSmart.spin(forward);
+  RightDriveSmart.spin(forward);
+}
+
+void fullSpeed() {
+  Drivetrain.setDriveVelocity(100, percent);
+  Drivetrain.drive(forward);
+}
+void driveStop() {
+    Drivetrain.setDriveVelocity(0, percent);
+    Drivetrain.drive(forward);
 }
 /*
 void drive(int v) {
@@ -103,6 +116,7 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
 
 void runOnAutonomous(void) {
+  clawMotor.spin(forward, 50, percent);
   Drivetrain.setDriveVelocity(50, percent);
   Brain.Screen.print("Running auto");
   Drivetrain.driveFor(forward, 110, inches);
@@ -144,6 +158,10 @@ void runOnDriverControl(void) {
     Controller1.ButtonR2.pressed(axelSpinBackward);
     Controller1.ButtonR2.released(axelSpinStop);
     // Controller1.ButtonR2.released(axelSpinHold);
+    
+    //fullspeed and drivestop
+    Controller1.ButtonUp.pressed(fullSpeed);
+    Controller1.ButtonUp.released(driveStop);
     
     
 
@@ -190,6 +208,8 @@ void runOnDriverControl(void) {
 
     LeftDriveSmart.spin(forward);
     RightDriveSmart.spin(forward); 
+
+
     // ........................................................................
 
     wait(20, msec); // Sleep the task for a short amount of time to
