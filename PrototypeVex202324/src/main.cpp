@@ -81,7 +81,7 @@ void turnRobot() {
  RightDriveSmart.setVelocity(100, percent);
  LeftDriveSmart.spin(forward);
  RightDriveSmart.spin(forward);
- wait (0.6, seconds);
+ wait (0.77, seconds);
  LeftDriveSmart.setVelocity(0, percent);
  RightDriveSmart.setVelocity(0, percent);
 }
@@ -150,7 +150,7 @@ void runOnAutonomous(void) {
  Drivetrain.driveFor(forward, -20, inches);
  turnRobot();
  Drivetrain.setDriveVelocity(100, percent);
- Drivetrain.driveFor(forward, 80, inches);
+ Drivetrain.driveFor(forward, -80, inches);
  }
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
