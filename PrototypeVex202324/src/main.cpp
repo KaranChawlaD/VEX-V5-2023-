@@ -150,7 +150,7 @@ void runOnAutonomous(void) {
  Drivetrain.driveFor(forward, -20, inches);
  turnRobot();
  Drivetrain.setDriveVelocity(100, percent);
- Drivetrain.driveFor(forward, 80, inches);
+ Drivetrain.driveFor(forward, -80, inches);
  }
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
