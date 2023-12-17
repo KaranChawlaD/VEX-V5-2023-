@@ -85,7 +85,26 @@ void turnRobot() {
  LeftDriveSmart.setVelocity(0, percent);
  RightDriveSmart.setVelocity(0, percent);
 }
+void turnRobot90() {
+ LeftDriveSmart.setVelocity(100, percent);
+ RightDriveSmart.setVelocity(-100, percent);
+ LeftDriveSmart.spin(forward);
+ RightDriveSmart.spin(forward);
+ wait (0.5, seconds);
+ LeftDriveSmart.setVelocity(0, percent);
+ RightDriveSmart.setVelocity(0, percent);
+}
 
+
+void turnWhileMoving() {
+  LeftDriveSmart.setVelocity(100, percent);
+  RightDriveSmart.setVelocity(35, percent);
+  LeftDriveSmart.spin(forward);
+  RightDriveSmart.spin(forward);
+  wait (0.97, seconds);
+  RightDriveSmart.setVelocity(100, percent);
+  wait (0.9, seconds);
+}
 
 void brakeRobot() {
  axelMotor.stop(brakeType::brake);
@@ -143,14 +162,29 @@ void pre_auton(void) {
 void runOnAutonomous(void) {
  Brain.Screen.print("Running auto");
  clawMotor.spin(forward, 50, percent);
- Drivetrain.setDriveVelocity(50, percent);
+ Drivetrain.setDriveVelocity(75, percent);
  Drivetrain.driveFor(forward, 110, inches);
  clawMotor.spin(forward, -50, percent);
  wait (0.75, seconds);
  Drivetrain.driveFor(forward, -20, inches);
  turnRobot();
  Drivetrain.setDriveVelocity(120, percent);
- Drivetrain.driveFor(forward, -95, inches);
+ Drivetrain.driveFor(forward, -85, inches);
+ turnWhileMoving();
+ clawMotor.spin(forward, 50, percent);
+ turnRobot90();
+ LeftDriveSmart.setVelocity(100, percent);
+  RightDriveSmart.setVelocity(100, percent);
+  LeftDriveSmart.spin(forward);
+  RightDriveSmart.spin(forward);
+  wait (1.5, seconds);
+  clawMotor.spin(forward, -70, percent);
+  wait (0.5, seconds);
+  turnRobot();
+  LeftDriveSmart.setVelocity(-100, percent);
+  RightDriveSmart.setVelocity(-100, percent);
+  LeftDriveSmart.spin(forward);
+  RightDriveSmart.spin(forward);
  }
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
